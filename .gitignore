@@ -1,0 +1,5 @@
+node_modules/
+public/icons/*.png
+data/
+*.log
+.DS_Store
