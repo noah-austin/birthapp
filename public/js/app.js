@@ -1,6 +1,7 @@
 import { el, clear } from './util.js';
 import { store, settings, updateSettings } from './state.js';
 import { sync } from './sync.js';
+import { icon } from './icons.js';
 
 import homeView from './views/home.js';
 import timerView from './views/timer.js';
@@ -31,11 +32,11 @@ const views = {
 };
 
 const tabs = [
-  { route: 'home', label: 'Home', icon: '🏠' },
-  { route: 'timer', label: 'Surges', icon: '🌊' },
-  { route: 'cards', label: 'Cards', icon: '🌿' },
-  { route: 'playbook', label: 'Noah', icon: '🤝' },
-  { route: 'more', label: 'More', icon: '⋯' },
+  { route: 'home', label: 'Home', icon: 'home' },
+  { route: 'timer', label: 'Surges', icon: 'wave' },
+  { route: 'cards', label: 'Cards', icon: 'leaf' },
+  { route: 'playbook', label: 'Noah', icon: 'support' },
+  { route: 'more', label: 'More', icon: 'dots' },
 ];
 
 const appRoot = document.getElementById('app');
@@ -79,7 +80,7 @@ function renderNav(activeRoute) {
         'aria-current': isActive ? 'page' : null,
         onclick: () => navigate(tab.route),
       },
-      el('span', { class: 'nav-icon', 'aria-hidden': 'true' }, tab.icon),
+      icon(tab.icon, { className: 'nav-icon' }),
       el('span', { class: 'nav-label' }, tab.label)),
     );
   }

@@ -73,11 +73,11 @@ export default function postpartumView(root) {
       el('div', { class: 'card' },
         el('h2', {}, 'Log a diaper'),
         el('div', { class: 'chip-grid' },
-          [['Wet', '💧'], ['Dirty', '💩'], ['Both', '💧💩']].map(([type, icon]) => el('button', {
+          ['Wet', 'Dirty', 'Both'].map((type) => el('button', {
             class: 'chip chip-big',
             type: 'button',
             onclick: () => { store.add('diapers', { at: Date.now(), type }); buzz(12); paint(); },
-          }, `${icon} ${type}`)))),
+          }, type)))),
       el('div', { class: 'card muted-card' },
         el('h2', {}, 'What is normal'),
         el('p', { class: 'small' }, 'Roughly one wet diaper per day of life for the first week — 1 on day one, 2 on day two, and so on, levelling off around 6+ a day once your milk is in.'),

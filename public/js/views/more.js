@@ -1,16 +1,17 @@
-﻿import { el } from '../util.js';
+import { el } from '../util.js';
 import { settings } from '../state.js';
+import { icon } from '../icons.js';
 
 export default function moreView(root, ctx) {
   const s = settings();
   const links = [
-    { icon: '📋', title: 'Birth plan', sub: 'Birth center + hospital backup', route: 'plan' },
-    { icon: '📝', title: 'Labor log', sub: 'Timeline and birth story', route: 'log' },
-    { icon: '✅', title: 'Checklists', sub: 'Bags, signs, golden hour', route: 'checklists' },
-    { icon: '🌬', title: 'Breathe', sub: 'Paced breathing', route: 'breathe' },
-    { icon: '🙏', title: 'Prayer', sub: 'Prayers and worship', route: 'prayer' },
-    { icon: '🍼', title: 'Postpartum', sub: 'Feeds, diapers, recovery', route: 'postpartum' },
-    { icon: '⚙️', title: 'Settings', sub: 'Names, contacts, sync', route: 'settings' },
+    { icon: 'clipboard', title: 'Birth plan', sub: 'Birth center + hospital backup', route: 'plan' },
+    { icon: 'pen', title: 'Labor log', sub: 'Timeline and birth story', route: 'log' },
+    { icon: 'checklist', title: 'Checklists', sub: 'Bags, signs, golden hour', route: 'checklists' },
+    { icon: 'wind', title: 'Breathe', sub: 'Paced breathing', route: 'breathe' },
+    { icon: 'cross', title: 'Prayer', sub: 'Prayers and worship', route: 'prayer' },
+    { icon: 'bottle', title: 'Postpartum', sub: 'Feeds, diapers, recovery', route: 'postpartum' },
+    { icon: 'gear', title: 'Settings', sub: 'Names, contacts, sync', route: 'settings' },
   ];
 
   root.append(
@@ -21,7 +22,7 @@ export default function moreView(root, ctx) {
         type: 'button',
         onclick: () => ctx.navigate(link.route),
       },
-      el('span', { class: 'menu-icon', 'aria-hidden': 'true' }, link.icon),
+      icon(link.icon, { className: 'menu-icon' }),
       el('span', { class: 'menu-text' },
         el('span', { class: 'menu-title' }, link.title),
         el('span', { class: 'menu-sub' }, link.sub)),

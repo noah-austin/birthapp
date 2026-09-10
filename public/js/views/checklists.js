@@ -1,4 +1,5 @@
 import { el, clear, confirmAction, buzz } from '../util.js';
+import { icon } from '../icons.js';
 import { store } from '../state.js';
 import { checklists } from '../data/checklists.js';
 
@@ -59,7 +60,7 @@ export default function checklistsView(root, ctx) {
             buzz(10);
             paint();
           },
-        }, checked ? '✓' : '');
+        }, checked ? icon('check') : null);
         return el('li', { class: checked ? 'is-done' : '' }, box, el('span', {}, text));
       }));
 
@@ -93,7 +94,7 @@ export default function checklistsView(root, ctx) {
         onclick: () => { activeId = list.id; paint(); },
       }, list.name,
       progress && progress.done === progress.total && progress.total
-        ? el('span', { class: 'tick' }, ' ✓')
+        ? el('span', { class: 'tick' }, icon('check'))
         : null));
     }
 

@@ -1,7 +1,8 @@
-﻿import { el, clear, formatAgo, formatDuration, mean } from '../util.js';
+import { el, clear, formatAgo, formatDuration, mean } from '../util.js';
 import { store, settings } from '../state.js';
 import { affirmations, scripture } from '../data/cards.js';
 import { readPattern } from './timer.js';
+import { icon } from '../icons.js';
 
 function daysUntil(dateStr) {
   if (!dateStr) return null;
@@ -81,14 +82,14 @@ export default function homeView(root, ctx) {
     statusCard,
 
     el('div', { class: 'tile-grid' },
-      tile('🌊', 'Surge timer', 'Time and read the pattern', () => ctx.navigate('timer')),
-      tile('🤝', 'Noah’s playbook', 'What to do right now', () => ctx.navigate('playbook')),
-      tile('🌿', 'Affirmations', 'Read one to her', () => ctx.navigate('cards')),
-      tile('🌬', 'Breathe', 'Pace it together', () => ctx.navigate('breathe')),
-      tile('📋', 'Birth plan', 'Both versions', () => ctx.navigate('plan')),
-      tile('🙏', 'Prayer', 'Pray over her', () => ctx.navigate('prayer')),
-      tile('📝', 'Labor log', 'Mark the moments', () => ctx.navigate('log')),
-      tile('✅', 'Checklists', 'Bags & golden hour', () => ctx.navigate('checklists'))),
+      tile('wave', 'Surge timer', 'Time and read the pattern', () => ctx.navigate('timer')),
+      tile('support', 'Noah’s playbook', 'What to do right now', () => ctx.navigate('playbook')),
+      tile('leaf', 'Affirmations', 'Read one to her', () => ctx.navigate('cards')),
+      tile('wind', 'Breathe', 'Pace it together', () => ctx.navigate('breathe')),
+      tile('clipboard', 'Birth plan', 'Both versions', () => ctx.navigate('plan')),
+      tile('cross', 'Prayer', 'Pray over her', () => ctx.navigate('prayer')),
+      tile('pen', 'Labor log', 'Mark the moments', () => ctx.navigate('log')),
+      tile('checklist', 'Checklists', 'Bags & golden hour', () => ctx.navigate('checklists'))),
 
     cardOfMoment,
 
@@ -111,9 +112,9 @@ export default function homeView(root, ctx) {
   };
 }
 
-function tile(icon, title, subtitle, onClick) {
+function tile(iconName, title, subtitle, onClick) {
   return el('button', { class: 'tile', type: 'button', onclick: onClick },
-    el('span', { class: 'tile-icon', 'aria-hidden': 'true' }, icon),
+    icon(iconName, { className: 'tile-icon' }),
     el('span', { class: 'tile-title' }, title),
     el('span', { class: 'tile-sub' }, subtitle));
 }

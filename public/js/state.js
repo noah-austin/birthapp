@@ -55,14 +55,20 @@ class Store {
 
   persist() {
     if (this._persistTimer) return;
-    this._persistTimer = setTimeout(() => {
+    this._persistTimer = setTimeout(() => this.flush(), 250);
+  }
+
+  /** Write through immediately, cancelling any pending debounced write. */
+  flush() {
+    if (this._persistTimer) {
+      clearTimeout(this._persistTimer);
       this._persistTimer = null;
-      try {
-        localStorage.setItem(LS_RECORDS, JSON.stringify([...this.records.values()]));
-      } catch (err) {
-        console.warn('local persistence failed', err);
-      }
-    }, 250);
+    }
+    try {
+      localStorage.setItem(LS_RECORDS, JSON.stringify([...this.records.values()]));
+    } catch (err) {
+      console.warn('local persistence failed', err);
+    }
   }
 
   subscribe(fn) {
@@ -168,6 +174,14 @@ class Store {
 }
 
 export const store = new Store();
+
+// A surge can be logged and the phone locked inside the 250ms debounce window,
+// and iOS may discard the page without warning. Flush on the way out so the
+// last tap is never the one that goes missing.
+window.addEventListener('pagehide', () => store.flush());
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') store.flush();
+});
 
 /* ---- Settings ------------------------------------------------------------ */
 

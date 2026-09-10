@@ -1,7 +1,7 @@
 // Offline-first service worker. The birth center wifi is not a plan, so the
 // whole app shell is cached on install and served from cache first.
 
-const CACHE = 'clara-v1';
+const CACHE = 'clara-v2';
 
 const SHELL = [
   '/',
@@ -12,6 +12,7 @@ const SHELL = [
   '/js/state.js',
   '/js/sync.js',
   '/js/util.js',
+  '/js/icons.js',
   '/js/data/cards.js',
   '/js/data/plans.js',
   '/js/data/playbook.js',

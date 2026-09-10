@@ -1,6 +1,7 @@
 import { el, clear, speak, stopSpeaking, buzz } from '../util.js';
 import { store, settings, updateSettings } from '../state.js';
 import { affirmations, scripture } from '../data/cards.js';
+import { icon } from '../icons.js';
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -8,6 +9,11 @@ const FILTERS = [
   { id: 'scripture', label: 'Scripture' },
   { id: 'favorite', label: 'Favorites' },
 ];
+
+/** Swap a button's icon and label together. */
+function setBtn(btn, iconName, label, { filled = false } = {}) {
+  btn.replaceChildren(icon(iconName, { filled }), el('span', {}, label));
+}
 
 function favorites() {
   return new Set(store.list('favorites').map((f) => f.id));
@@ -26,9 +32,10 @@ export default function cardsView(root, ctx) {
 
   const cardNode = el('div', { class: 'deck-card' });
   const counter = el('div', { class: 'deck-counter' });
-  const favBtn = el('button', { class: 'ghost-btn', type: 'button' }, '♡');
-  const playBtn = el('button', { class: 'ghost-btn', type: 'button' }, '▶ Auto');
-  const speakBtn = el('button', { class: 'ghost-btn', type: 'button' }, '🔊 Read');
+  const favBtn = el('button', { class: 'ghost-btn', type: 'button', 'aria-label': 'Save this card' },
+    icon('heart'), el('span', {}, 'Save'));
+  const playBtn = el('button', { class: 'ghost-btn', type: 'button' }, icon('play'), el('span', {}, 'Auto'));
+  const speakBtn = el('button', { class: 'ghost-btn', type: 'button' }, icon('speaker'), el('span', {}, 'Read'));
   const filterRow = el('div', { class: 'filter-row' });
 
   function pool() {
@@ -71,7 +78,7 @@ export default function cardsView(root, ctx) {
     if (!order.length) {
       cardNode.className = 'deck-card is-empty';
       cardNode.append(el('p', {}, filter === 'favorite'
-        ? 'No favorites yet. Tap ♡ on the cards that land, and they will collect here.'
+        ? 'No favorites yet. Tap Save on the cards that land, and they will collect here.'
         : 'No cards in this deck.'));
       return;
     }
@@ -82,8 +89,9 @@ export default function cardsView(root, ctx) {
     cardNode.append(el('p', { class: 'deck-text' }, card.text));
 
     counter.append(`${index + 1} of ${order.length}`);
-    favBtn.textContent = favorites().has(card.id) ? '♥' : '♡';
-    favBtn.classList.toggle('is-on', favorites().has(card.id));
+    const saved = favorites().has(card.id);
+    setBtn(favBtn, 'heart', saved ? 'Saved' : 'Save', { filled: saved });
+    favBtn.classList.toggle('is-on', saved);
   }
 
   function renderFilters() {
@@ -105,7 +113,7 @@ export default function cardsView(root, ctx) {
   function stopAutoplay() {
     clearInterval(autoplay);
     autoplay = null;
-    playBtn.textContent = '▶ Auto';
+    setBtn(playBtn, 'play', 'Auto');
     playBtn.classList.remove('is-on');
   }
 
@@ -116,7 +124,7 @@ export default function cardsView(root, ctx) {
     }
     const seconds = Number(settings().autoplaySeconds) || 12;
     autoplay = setInterval(() => step(1), seconds * 1000);
-    playBtn.textContent = '⏸ Stop';
+    setBtn(playBtn, 'pause', 'Stop');
     playBtn.classList.add('is-on');
   });
 
@@ -177,15 +185,15 @@ export default function cardsView(root, ctx) {
     filterRow,
     cardNode,
     el('div', { class: 'deck-controls' },
-      el('button', { class: 'ghost-btn', type: 'button', onclick: () => step(-1) }, '←'),
+      el('button', { class: 'ghost-btn', type: 'button', 'aria-label': 'Previous card', onclick: () => step(-1) }, icon('chevronLeft')),
       counter,
-      el('button', { class: 'ghost-btn', type: 'button', onclick: () => step(1) }, '→')),
+      el('button', { class: 'ghost-btn', type: 'button', 'aria-label': 'Next card', onclick: () => step(1) }, icon('chevronRight'))),
     el('div', { class: 'deck-controls' }, favBtn, speakBtn, playBtn,
       el('button', {
         class: 'ghost-btn',
         type: 'button',
         onclick: () => { rebuild({ shuffle: true }); paint(); },
-      }, '🔀 Shuffle')),
+      }, icon('shuffle'), el('span', {}, 'Shuffle'))),
     el('div', { class: 'card muted-card' },
       el('div', { class: 'row' },
         el('span', { class: 'small' }, 'Auto-advance every'), speedInput, speedLabel)),

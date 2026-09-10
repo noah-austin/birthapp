@@ -10,7 +10,9 @@ class SyncClient extends EventTarget {
   constructor() {
     super();
     this.ws = null;
-    this.status = 'offline';
+    // Starts unset, not 'offline', so the first real status always reaches the
+    // banner. Seeding it with a real value swallows that first update.
+    this.status = null;
     this.peers = 0;
     this.retryDelay = 1000;
     this.pending = [];
@@ -19,6 +21,18 @@ class SyncClient extends EventTarget {
     store.onOutbound = (records) => this.push(records);
 
     window.addEventListener('online', () => this.connect());
+    // Say so the moment the signal drops. A banner reading "Synced" when
+    // nothing is reaching the other phone is worse than no banner at all.
+    window.addEventListener('offline', () => {
+      this.peers = 0;
+      this.setStatus('offline');
+      try {
+        this.ws?.close();
+      } catch {
+        /* already gone */
+      }
+      this.ws = null;
+    });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible') this.connect();
     });

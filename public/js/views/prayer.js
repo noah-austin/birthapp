@@ -1,4 +1,5 @@
 import { el, speak, stopSpeaking } from '../util.js';
+import { icon } from '../icons.js';
 import { settings } from '../state.js';
 import { prayers } from '../data/playbook.js';
 
@@ -25,7 +26,7 @@ export default function prayerView(root, ctx) {
             class: 'ghost-btn',
             type: 'button',
             onclick: () => speak(prayer.text, { rate: 0.8 }),
-          }, '🔊 Read aloud'))))),
+          }, icon('speaker'), el('span', {}, 'Read aloud')))))),
 
     el('div', { class: 'card' },
       el('h2', {}, 'Worship'),
