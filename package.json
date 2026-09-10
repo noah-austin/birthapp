@@ -1,0 +1,19 @@
+{
+  "name": "birthapp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Clara's Birth Companion — a labor support app for Jillian & Noah",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "postinstall": "node scripts/make-icons.js",
+    "icons": "node scripts/make-icons.js --force"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
